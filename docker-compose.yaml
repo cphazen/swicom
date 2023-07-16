@@ -1,8 +1,13 @@
 version: '2'
 services:
-  app:
-    container_name: app
-    build: .
+  ui: 
+    container_name: ui
+    build: ./ui/
+    ports:
+      - 3000:3000
+  api:
+    container_name: api
+    build: ./api/
     environment:
       - TEST_ENV=test
     ports:
@@ -17,7 +22,7 @@ services:
     volumes:
       - db-data:/data/postgres
     ports:
-      - "5432:5432"
+      - 5432:5432
 
 volumes:
   db-data:
