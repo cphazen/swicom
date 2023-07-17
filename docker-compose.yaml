@@ -18,11 +18,11 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=default
+      - POSTGRES_DB=postgres
     volumes:
-      - db-data:/data/postgres
+      - ./data:/docker-entrypoint-initdb.d
     ports:
       - 5432:5432
 
 volumes:
-  db-data:
+  data:
