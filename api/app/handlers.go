@@ -5,6 +5,9 @@ import (
 	"example/swift-comply/database/entities"
 	"example/swift-comply/models"
 	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
 )
 
 func jsonResponse(w http.ResponseWriter, r *http.Request, status int, data interface{}) {
@@ -23,8 +26,8 @@ func (a *App) IndexHandler() http.HandlerFunc {
 
 func (a *App) GetCatsHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		res, _ := a.DB.GetCats()
-		if res == nil {
+		res, err := a.DB.GetCats()
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
@@ -33,5 +36,25 @@ func (a *App) GetCatsHandler() http.HandlerFunc {
 			resp[idx] = entities.CatJson(post)
 		}
 		jsonResponse(w, r, http.StatusOK, resp)
+	}
+}
+
+func (a *App) GetCatHandler() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		id, ok := mux.Vars(r)["id"]
+		if !ok {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+		idInt, err := strconv.Atoi(id)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		res, err := a.DB.GetCatById(idInt)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+		jsonResponse(w, r, http.StatusOK, entities.CatJson(res))
 	}
 }
