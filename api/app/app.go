@@ -1,14 +1,14 @@
 package app
 
 import (
-	"database/sql"
+	"example/swift-comply/database"
 
 	"github.com/gorilla/mux"
 )
 
 type App struct {
 	Router *mux.Router
-	DB     *sql.DB
+	DB     *database.DB
 }
 
 func Initialize() *App {
@@ -21,4 +21,5 @@ func Initialize() *App {
 
 func (a *App) routes() {
 	a.Router.HandleFunc("/", a.IndexHandler()).Methods("GET")
+	a.Router.HandleFunc("/cats", a.GetCatsHandler()).Methods("GET")
 }
