@@ -10,11 +10,6 @@ type DB struct {
 	db *sql.DB
 }
 
-type DBEntity[T any] interface {
-	getEntity(*sql.Rows) (T, error)
-	getEntities(*sql.Rows) ([]T, error)
-}
-
 func (d *DB) Open() error {
 	pg, err := sql.Open("postgres", pgConnectionString)
 	if err != nil {
