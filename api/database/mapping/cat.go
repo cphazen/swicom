@@ -1,11 +1,11 @@
-package entities
+package mapping
 
 import (
 	"database/sql"
 	"example/swift-comply/models"
 )
 
-func Cat(r *sql.Rows) (models.Cat, error) {
+func parseCatRow(r *sql.Rows) (models.Cat, error) {
 	var cat models.Cat
 	if err := r.Scan(&cat.Id, &cat.Name, &cat.DateOfBirth, &cat.BreedId); err != nil {
 		return cat, err
@@ -13,10 +13,18 @@ func Cat(r *sql.Rows) (models.Cat, error) {
 	return cat, nil
 }
 
+func Cat(r *sql.Rows) (models.Cat, error) {
+	ok := r.Next()
+	if !ok {
+		return models.Cat{}, nil
+	}
+	return parseCatRow(r)
+}
+
 func Cats(r *sql.Rows) ([]models.Cat, error) {
 	var cats []models.Cat
 	for r.Next() {
-		cat, err := Cat(r)
+		cat, err := parseCatRow(r)
 		if err != nil {
 			return cats, err
 		}

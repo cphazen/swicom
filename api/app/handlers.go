@@ -2,7 +2,7 @@ package app
 
 import (
 	"encoding/json"
-	"example/swift-comply/database/entities"
+	"example/swift-comply/database/mapping"
 	"example/swift-comply/models"
 	"net/http"
 	"strconv"
@@ -33,7 +33,7 @@ func (a *App) GetCatsHandler() http.HandlerFunc {
 		}
 		var resp = make([]models.CatJson, len(res))
 		for idx, post := range res {
-			resp[idx] = entities.CatJson(post)
+			resp[idx] = mapping.CatJson(post)
 		}
 		jsonResponse(w, r, http.StatusOK, resp)
 	}
@@ -54,7 +54,10 @@ func (a *App) GetCatHandler() http.HandlerFunc {
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
+		} else if res == (models.Cat{}) {
+			w.WriteHeader(http.StatusNotFound)
+			return
 		}
-		jsonResponse(w, r, http.StatusOK, entities.CatJson(res))
+		jsonResponse(w, r, http.StatusOK, mapping.CatJson(res))
 	}
 }

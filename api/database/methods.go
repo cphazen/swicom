@@ -1,7 +1,7 @@
 package database
 
 import (
-	"example/swift-comply/database/entities"
+	"example/swift-comply/database/mapping"
 	"example/swift-comply/models"
 )
 
@@ -11,7 +11,7 @@ func (d *DB) GetCats() ([]models.Cat, error) {
 		return nil, err
 	}
 	defer rows.Close()
-	return entities.Cats(rows)
+	return mapping.Cats(rows)
 }
 
 func (d *DB) GetCatById(id int) (models.Cat, error) {
@@ -20,5 +20,5 @@ func (d *DB) GetCatById(id int) (models.Cat, error) {
 		return models.Cat{}, err
 	}
 	defer row.Close()
-	return entities.Cat(row)
+	return mapping.Cat(row)
 }

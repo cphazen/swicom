@@ -21,6 +21,6 @@ func Initialize() *App {
 
 func (a *App) routes() {
 	a.Router.HandleFunc("/", a.IndexHandler()).Methods("GET")
-	a.Router.HandleFunc("/cats", a.GetCatsHandler()).Methods("GET")
+	a.Router.HandleFunc("/cats/", a.GetCatsHandler()).Methods("GET")
 	a.Router.HandleFunc("/cats/{id}", a.GetCatHandler()).Methods("GET")
 }
